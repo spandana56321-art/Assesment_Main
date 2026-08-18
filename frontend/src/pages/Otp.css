@@ -1,0 +1,355 @@
+/* ==========================================================================
+   TOKENS — pulled from the MyHourly Assessments reference screenshot
+   (dark navy hero, muted gold accent, blue brand mark, light card panel)
+   ========================================================================== */
+:root {
+  --color-bg-page: #eef0f3;
+  --color-bg-dark: #0b0b0e;
+
+  --color-card: #ffffff;
+  --color-text: #15171c;
+  --color-text-muted: #6b7280;
+  --color-text-faint: #98a0ac;
+
+  --color-border: #e4e6eb;
+  --color-border-strong: #cbd0d8;
+
+  --color-brand-blue: #3358e0;
+
+  --color-primary: #14161b;      /* near-black — primary buttons, active pill */
+  --color-primary-soft: #eef0f3;
+
+  --color-warning: #b8721c;      /* gold accent used across labels/badges */
+  --color-warning-soft: rgba(199, 154, 78, 0.14);
+  --color-gold: #c79a4e;
+  --color-gold-border: rgba(199, 154, 78, 0.35);
+
+  --color-danger: #c0392b;
+  --color-danger-soft: rgba(192, 57, 43, 0.1);
+  --color-success: #2f7d5c;
+  --color-success-soft: rgba(47, 125, 92, 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+}
+
+/* ==========================================================================
+   CARD SHELL
+   ========================================================================== */
+.assessment-card {
+  position: relative;
+  max-width: 440px;
+  margin: 0 auto;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 32px 32px 28px;
+  box-shadow: 0 20px 40px -24px rgba(11, 11, 14, 0.25);
+}
+
+.assessment-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-gold) 0%,
+    #e4c17e 50%,
+    var(--color-gold) 100%
+  );
+}
+
+.assessment-card h1 {
+  margin: 6px 0 10px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.assessment-card .subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.otp-email {
+  margin: 4px 0 24px;
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   OTP INPUT
+   ========================================================================== */
+.otp-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text);
+  text-align: center;
+  letter-spacing: 0.35em;
+  font-weight: 600;
+  font-size: 18px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px var(--color-warning-soft);
+}
+
+.otp-input:disabled {
+  background: var(--color-primary-soft);
+  color: var(--color-text-faint);
+}
+
+.otp-input::placeholder {
+  color: var(--color-text-faint);
+  letter-spacing: 0.35em;
+}
+
+/* ==========================================================================
+   PRIMARY BUTTON
+   ========================================================================== */
+.btn-primary {
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  background: var(--color-border-strong);
+  color: var(--color-text-faint);
+  cursor: not-allowed;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+/* ==========================================================================
+   MESSAGES
+   ========================================================================== */
+.form-success {
+  margin: -6px 0 16px;
+  font-size: 13px;
+  color: var(--color-success);
+  background: var(--color-success-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+.form-error {
+  margin: -6px 0 16px;
+  font-size: 13px;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+/* ==========================================================================
+   RESEND
+   ========================================================================== */
+.otp-resend {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.otp-resend p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+}
+
+.otp-resend-btn {
+  border: none;
+  background: none;
+  color: var(--color-gold);
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.otp-resend-btn:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.otp-resend-btn:disabled {
+  color: var(--color-text-faint);
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   DEMO BANNER (unchanged, retoned to palette)
+   ========================================================================== */
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-warning);
+  background: var(--color-warning-soft);
+  border: 1px solid var(--color-gold-border);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 22px;
+}
+
+.demo-banner-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-warning-soft);
+  padding: 3px 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Verification method selector (email OR phone, not both)                */
+/* ---------------------------------------------------------------------- */
+.method-select-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.method-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.method-option {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  font: inherit;
+}
+
+.method-option:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+}
+
+.method-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.method-option--active {
+  border-color: var(--color-gold);
+  background: var(--color-warning-soft);
+}
+
+.method-option input[type='radio'] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+.method-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.method-option-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.method-option-value {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.method-hint {
+  font-size: 13px;
+  color: var(--color-text-faint);
+  margin-bottom: 10px;
+}
+
+@media (max-width: 520px) {
+  .method-select {
+    grid-template-columns: 1fr;
+  }
+
+  .assessment-card {
+    padding: 24px 20px 22px;
+  }
+}

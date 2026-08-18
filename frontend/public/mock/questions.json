@@ -1,0 +1,390 @@
+{
+  "devops": [
+    {
+      "id": "do-1",
+      "question": "What does CI/CD stand for?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "Continuous Integration / Continuous Deployment",
+        "Code Integration / Code Deployment",
+        "Central Index / Central Deploy",
+        "Continuous Index / Continuous Data"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "do-2",
+      "question": "This Dockerfile has a bug \u2014 the app can't find its dependencies at runtime. Which line is wrong?",
+      "difficulty": "Junior",
+      "type": "coding",
+      "language": "dockerfile",
+      "code": "FROM node:20-alpine\nWORKDIR /app\nCOPY . .\nRUN npm install\nCMD [\"npm\", \"start\"]",
+      "options": [
+        "COPY . . should come after RUN npm install, or package*.json should be copied first",
+        "FROM node:20-alpine is invalid",
+        "WORKDIR /app is unnecessary",
+        "CMD should use RUN instead"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "do-3",
+      "question": "Write a Dockerfile that installs dependencies before copying the rest of the source (so Docker can cache the install layer).",
+      "difficulty": "Intermediate",
+      "type": "scenario",
+      "language": "dockerfile",
+      "placeholder": "FROM node:20-alpine\n...",
+      "keyTerms": [
+        "FROM",
+        "COPY package",
+        "RUN npm install",
+        "COPY . ."
+      ]
+    }
+  ],
+  "da": [
+    {
+      "id": "da-1",
+      "question": "What does SQL stand for?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "Structured Query Language",
+        "Simple Query Logic",
+        "System Query Language",
+        "Structured Question Language"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "da-2",
+      "question": "What will this query return?",
+      "difficulty": "Junior",
+      "type": "output",
+      "language": "sql",
+      "code": "SELECT COUNT(*) FROM orders WHERE status = 'cancelled';",
+      "options": [
+        "The number of cancelled orders",
+        "All cancelled order rows",
+        "The total order count",
+        "A syntax error"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "da-3",
+      "question": "Write a SQL query to find the average order value per customer, sorted highest to lowest.",
+      "difficulty": "Intermediate",
+      "type": "scenario",
+      "language": "sql",
+      "placeholder": "SELECT ...",
+      "keyTerms": [
+        "AVG",
+        "GROUP BY",
+        "ORDER BY"
+      ]
+    }
+  ],
+  "react": [
+    {
+      "id": "rx-1",
+      "question": "What does JSX stand for?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "JavaScript XML",
+        "Java Syntax Extension",
+        "JSON XML",
+        "JavaScript Extra"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "rx-2",
+      "question": "This component re-renders in an infinite loop. What's the bug?",
+      "difficulty": "Junior",
+      "type": "coding",
+      "language": "jsx",
+      "code": "function Counter() {\n  const [count, setCount] = useState(0)\n  setCount(count + 1)\n  return <div>{count}</div>\n}",
+      "options": [
+        "setCount is called directly in the render body instead of inside an event handler or useEffect",
+        "useState is used incorrectly",
+        "The div is missing a key",
+        "count should be a string"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "rx-3",
+      "question": "Write a component that fetches a list of users from an API and renders their names.",
+      "difficulty": "Advanced",
+      "type": "scenario",
+      "language": "jsx",
+      "placeholder": "function Users() {\n  ...\n}",
+      "keyTerms": [
+        "useState",
+        "useEffect",
+        "fetch"
+      ]
+    },
+    {
+      "id": "rx-live-1",
+      "question": "Write a classNames(...args) helper that joins truthy string arguments with a single space, ignoring falsy values (false, null, undefined, 0, ''). This is the same utility most React apps use to conditionally combine CSS classes.",
+      "difficulty": "Junior",
+      "type": "live-coding",
+      "language": "javascript",
+      "starterCode": "function classNames(...args) {\n  // TODO: implement\n}\n",
+      "testCases": [
+        {
+          "label": "classNames('a', 'b') === 'a b'",
+          "check": "return classNames('a','b') === 'a b'"
+        },
+        {
+          "label": "falsy values are skipped",
+          "check": "return classNames('a', false, 'b', null, 'c', undefined) === 'a b c'"
+        },
+        {
+          "label": "classNames() === ''",
+          "check": "return classNames() === ''"
+        },
+        {
+          "label": "works inside a conditional expression",
+          "check": "return classNames('active', 0 && 'x', 'btn') === 'active btn'"
+        }
+      ]
+    },
+    {
+      "id": "rx-live-2",
+      "question": "Write a counterReducer(state, action) function for use with useReducer. It should handle { type: 'increment' }, { type: 'decrement' }, and { type: 'reset' }, and return the same state object unchanged for any other action type.",
+      "difficulty": "Intermediate",
+      "type": "live-coding",
+      "language": "javascript",
+      "starterCode": "function counterReducer(state, action) {\n  // TODO: implement\n  // state looks like { count: number }\n}\n",
+      "testCases": [
+        {
+          "label": "increment adds 1",
+          "check": "return counterReducer({count:0}, {type:'increment'}).count === 1"
+        },
+        {
+          "label": "decrement subtracts 1",
+          "check": "return counterReducer({count:5}, {type:'decrement'}).count === 4"
+        },
+        {
+          "label": "reset sets count to 0",
+          "check": "return counterReducer({count:5}, {type:'reset'}).count === 0"
+        },
+        {
+          "label": "unknown action returns unchanged state",
+          "check": "return counterReducer({count:3}, {type:'noop'}).count === 3"
+        }
+      ]
+    },
+    {
+      "id": "rx-live-3",
+      "question": "Write a debounce(fn, delay) function. The returned function should only call fn once, after `delay` ms have passed since the LAST time it was invoked (calling it repeatedly resets the timer).",
+      "difficulty": "Advanced",
+      "type": "live-coding",
+      "language": "javascript",
+      "starterCode": "function debounce(fn, delay) {\n  // TODO: implement\n}\n",
+      "testCases": [
+        {
+          "label": "only fires once after rapid repeated calls",
+          "check": "return new Promise((resolve) => { let calls = 0; const d = debounce(() => { calls++ }, 40); d(); d(); d(); setTimeout(() => resolve(calls === 1), 120) })"
+        },
+        {
+          "label": "fires again on a later, separate call",
+          "check": "return new Promise((resolve) => { let calls = 0; const d = debounce(() => { calls++ }, 30); d(); setTimeout(() => { d(); setTimeout(() => resolve(calls === 2), 60) }, 80) })"
+        }
+      ]
+    },
+    {
+      "id": "rx-live-4",
+      "question": "Write a deepMerge(a, b) function that deeply merges two plain objects, with values from b overriding values from a at every nested level. Arrays and non-object values in b simply replace the value in a.",
+      "difficulty": "Advanced",
+      "type": "live-coding",
+      "language": "javascript",
+      "starterCode": "function deepMerge(a, b) {\n  // TODO: implement\n}\n",
+      "testCases": [
+        {
+          "label": "merges top-level keys",
+          "check": "return JSON.stringify(deepMerge({a:1}, {b:2})) === JSON.stringify({a:1,b:2})"
+        },
+        {
+          "label": "merges nested objects",
+          "check": "const r = deepMerge({a:{x:1}}, {a:{y:2}}); return r.a.x === 1 && r.a.y === 2"
+        },
+        {
+          "label": "b overrides a on conflict",
+          "check": "return deepMerge({a:1}, {a:2}).a === 2"
+        },
+        {
+          "label": "arrays are replaced, not merged",
+          "check": "const r = deepMerge({list:[1,2]}, {list:[3]}); return JSON.stringify(r.list) === JSON.stringify([3])"
+        }
+      ]
+    },
+    {
+      "id": "rx-live-5",
+      "question": "Write a TodoList component that accepts an items prop (a list of objects with text and done properties). TodoList also accepts an onItemClick function prop, which should be called when a user clicks an item in the list \u2014 but only if that item is not marked as done. If the item IS done, onItemClick should not be called, and the click event should not propagate to the list's own onClick handler.",
+      "difficulty": "Advanced",
+      "type": "live-coding",
+      "language": "jsx",
+      "mode": "react",
+      "starterCode": "const TodoItem = (props) => <li onClick={props.onClick}>{props.item.text}</li>;\n\nconst TodoList = ({ items, onListClick, onItemClick }) => {\n  const handleItemClick = (item, event) => {\n    // Write your code here\n  };\n\n  return (\n    <ul onClick={onListClick}>\n      {items.map((item, index) =>\n        <TodoItem item={item} key={index} onClick={(event) => handleItemClick(item, event)}/>\n      )}\n    </ul>\n  );\n};\n",
+      "testCases": [
+        {
+          "label": "Clicking a not-done item triggers onItemClick with that item",
+          "check": "const root = ReactDOM.createRoot(document.getElementById('root')); const items = [{text:'Buy milk', done:false},{text:'Walk dog', done:true}]; let clicked = null; root.render(React.createElement(TodoList, { items, onListClick: () => {}, onItemClick: (item) => { clicked = item } })); await new Promise(r => setTimeout(r, 20)); document.querySelectorAll('#root li')[0].dispatchEvent(new MouseEvent('click', { bubbles: true })); await new Promise(r => setTimeout(r, 20)); const pass = clicked && clicked.text === 'Buy milk'; root.unmount(); document.getElementById('root').innerHTML = ''; return pass"
+        },
+        {
+          "label": "Clicking a done item does not trigger onItemClick or a parent click",
+          "check": "const root = ReactDOM.createRoot(document.getElementById('root')); const items = [{text:'Buy milk', done:false},{text:'Walk dog', done:true}]; let clicked = null; let listClicked = false; root.render(React.createElement(TodoList, { items, onListClick: () => { listClicked = true }, onItemClick: (item) => { clicked = item } })); await new Promise(r => setTimeout(r, 20)); document.querySelectorAll('#root li')[1].dispatchEvent(new MouseEvent('click', { bubbles: true })); await new Promise(r => setTimeout(r, 20)); const pass = clicked === null && listClicked === false; root.unmount(); document.getElementById('root').innerHTML = ''; return pass"
+        }
+      ]
+    }
+  ],
+  "htmlcss": [
+    {
+      "id": "hc-1",
+      "question": "Which tag creates a hyperlink in HTML?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "<a>",
+        "<link>",
+        "<href>",
+        "<nav>"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "hc-2",
+      "question": "Why won't these two divs sit side by side?",
+      "difficulty": "Junior",
+      "type": "coding",
+      "language": "css",
+      "code": ".box { width: 200px; }\n.row { }",
+      "options": [
+        ".row needs display: flex (or the boxes need to float)",
+        ".box needs a height",
+        "width can't be in px",
+        "div can't be styled with classes"
+      ],
+      "correct": 0
+    }
+  ],
+  "htmlcssjs": [
+    {
+      "id": "js-1",
+      "question": "Which keyword declares a block-scoped variable in JS?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "let",
+        "var",
+        "function",
+        "const only"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "js-2",
+      "question": "What does this log?",
+      "difficulty": "Junior",
+      "type": "output",
+      "language": "javascript",
+      "code": "console.log(typeof null)",
+      "options": [
+        "\"object\"",
+        "\"null\"",
+        "\"undefined\"",
+        "Throws an error"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "js-3",
+      "question": "Write a function that debounces another function by a given delay in milliseconds.",
+      "difficulty": "Advanced",
+      "type": "scenario",
+      "language": "javascript",
+      "placeholder": "function debounce(fn, delay) {\n  ...\n}",
+      "keyTerms": [
+        "setTimeout",
+        "clearTimeout"
+      ]
+    }
+  ],
+  "java": [
+    {
+      "id": "jv-1",
+      "question": "Which keyword creates a class in Java?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "class",
+        "object",
+        "struct",
+        "define"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "jv-2",
+      "question": "This method should return the sum of an array, but throws an error on empty input. What's missing?",
+      "difficulty": "Junior",
+      "type": "coding",
+      "language": "java",
+      "code": "int sum(int[] nums) {\n  int total = nums[0];\n  for (int i = 1; i < nums.length; i++) {\n    total += nums[i];\n  }\n  return total;\n}",
+      "options": [
+        "A check for an empty array before accessing nums[0]",
+        "The loop should start at i = 0",
+        "total should be a double",
+        "Nothing is wrong"
+      ],
+      "correct": 0
+    }
+  ],
+  "python": [
+    {
+      "id": "py-1",
+      "question": "Which symbol is used for comments in Python?",
+      "difficulty": "Fresher",
+      "type": "mcq",
+      "options": [
+        "#",
+        "//",
+        "/* */",
+        "--"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "py-2",
+      "question": "What does this print?",
+      "difficulty": "Junior",
+      "type": "output",
+      "language": "python",
+      "code": "print([1, 2, 3][-1])",
+      "options": [
+        "3",
+        "1",
+        "Error",
+        "[3]"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "py-3",
+      "question": "Write a function that returns the nth Fibonacci number.",
+      "difficulty": "Intermediate",
+      "type": "scenario",
+      "language": "python",
+      "placeholder": "def fibonacci(n):\n    ...",
+      "keyTerms": [
+        "def fibonacci"
+      ]
+    }
+  ]
+}

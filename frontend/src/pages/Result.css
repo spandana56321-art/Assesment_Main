@@ -1,0 +1,62 @@
+.readout {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  margin: 12px auto 24px;
+}
+
+.readout-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.readout-track {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 10;
+}
+
+.readout-value-ring {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 326.7;
+  stroke-dashoffset: calc(326.7 - (326.7 * var(--pct)) / 100);
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+/* Used on the candidate result screen, where we don't show a
+   score — just a completed/filled ring with a "Submitted" label. */
+.readout-value-ring--complete {
+  stroke-dashoffset: 0;
+}
+
+.readout-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.readout-score {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.readout-pct {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.readout-note {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}

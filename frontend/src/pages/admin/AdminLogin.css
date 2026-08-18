@@ -1,0 +1,526 @@
+/* ======================================================================
+   ADMIN CONSOLE — SIGN IN
+   Isolated design system for the admin surface only. Nothing here is
+   shared with the candidate Login.css — different file, different
+   class names, zero collision.
+====================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+.admin-auth-layout {
+  --ink: #0b0d12;
+  --ink-soft: #171b24;
+  --paper: #f1f2f6;
+  --card: #ffffff;
+  --brass: #c29a4b;
+  --brass-deep: #9c7a34;
+  --line-dark: rgba(255, 255, 255, 0.09);
+  --line-light: #e2e3e9;
+  --text: #11131a;
+  --text-muted: #5b6070;
+  --text-faint: #8a8fa0;
+
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - 130px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Left — identity panel                                                   */
+/* ---------------------------------------------------------------------- */
+.admin-auth-panel {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background:
+    radial-gradient(circle at 8% 6%, rgba(194, 154, 75, 0.14) 0%, transparent 40%),
+    linear-gradient(165deg, var(--ink) 0%, var(--ink-soft) 100%);
+  color: #f4f4f2;
+  padding: 46px 52px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.admin-auth-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0, 0, 0, 0.85), transparent 72%);
+  pointer-events: none;
+}
+
+.admin-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.admin-corner::before,
+.admin-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--brass);
+}
+
+.admin-corner--tr {
+  top: 28px;
+  right: 28px;
+}
+
+.admin-corner--tr::before {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.admin-corner--tr::after {
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.admin-corner--bl {
+  bottom: 28px;
+  left: 28px;
+}
+
+.admin-corner--bl::before {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.admin-corner--bl::after {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.admin-auth-panel-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Badge row */
+.admin-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-badge-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line-dark);
+}
+
+.admin-badge-mark img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.admin-badge-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: #f4f4f2;
+}
+
+.admin-badge-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--brass);
+  border: 1px solid rgba(194, 154, 75, 0.4);
+  border-radius: 999px;
+  padding: 3px 9px;
+  margin-left: 2px;
+}
+
+/* Headline block */
+.admin-panel-copy {
+  max-width: 430px;
+  animation: admin-fade-up 0.55s ease both;
+}
+
+.admin-panel-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 18px;
+}
+
+.admin-panel-eyebrow::before {
+  content: '[';
+  opacity: 0.7;
+}
+
+.admin-panel-eyebrow::after {
+  content: ']';
+  opacity: 0.7;
+}
+
+.admin-panel-heading {
+  font-family: var(--font-display);
+  font-size: 33px;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.admin-panel-body {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(244, 244, 242, 0.68);
+  margin-bottom: 30px;
+}
+
+.admin-capability-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-capability-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(244, 244, 242, 0.88);
+}
+
+.admin-capability-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 4px;
+  background: rgba(194, 154, 75, 0.14);
+  border: 1px solid rgba(194, 154, 75, 0.35);
+  color: var(--brass);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Footer strip */
+.admin-panel-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.admin-footer-terminal {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgba(244, 244, 242, 0.4);
+}
+
+.admin-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: rgba(244, 244, 242, 0.55);
+}
+
+.admin-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brass);
+  box-shadow: 0 0 0 0 rgba(194, 154, 75, 0.55);
+  animation: admin-pulse 2.4s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Right — sign-in card                                                    */
+/* ---------------------------------------------------------------------- */
+.admin-auth-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--paper);
+}
+
+.admin-auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--line-light);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(11, 13, 18, 0.04), 0 20px 40px -20px rgba(11, 13, 18, 0.22);
+  padding: 38px 36px 34px;
+  overflow: hidden;
+  animation: admin-card-in 0.5s ease both;
+}
+
+.admin-auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brass-deep), var(--brass) 50%, var(--brass-deep));
+}
+
+.admin-role-toggle {
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 28px;
+}
+
+.admin-role-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 9px 0;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-role-btn:hover:not(.admin-role-btn--active) {
+  color: var(--text);
+}
+
+.admin-role-btn--active {
+  background: var(--ink);
+  color: var(--brass);
+  box-shadow: 0 4px 10px -4px rgba(11, 13, 18, 0.4);
+}
+
+.admin-card-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 10px;
+}
+
+.admin-card-eyebrow::before {
+  content: '[';
+  opacity: 0.6;
+}
+
+.admin-card-eyebrow::after {
+  content: ']';
+  opacity: 0.6;
+}
+
+.admin-card-title {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.admin-card-subtitle {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-bottom: 26px;
+}
+
+/* Reuses the shared .field / label / input structure from common.css,
+   just re-themes the focus ring so it reads as "admin" (brass) rather
+   than the candidate blue. Scoped, so it only applies inside this card. */
+.admin-auth-card .field label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.admin-auth-card .field input {
+  border-color: var(--line-light);
+}
+
+.admin-auth-card .field input:focus {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(194, 154, 75, 0.16);
+}
+
+.admin-auth-card form {
+  gap: 16px;
+}
+
+.admin-signin-btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  width: 100%;
+  background: var(--ink);
+  border: none;
+  border-radius: 10px;
+  padding: 13px 22px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 10px -4px rgba(11, 13, 18, 0.35);
+  margin-top: 4px;
+}
+
+.admin-signin-btn:hover:not(:disabled) {
+  background: #04050a;
+}
+
+.admin-signin-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.admin-signin-btn:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.admin-signin-btn:disabled {
+  background: #c3c8db;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.admin-credential-chip {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  border: 1px dashed var(--line-light);
+  border-radius: 9px;
+  padding: 9px 12px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.admin-credential-chip::before {
+  content: '⌁';
+  color: var(--brass);
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Motion                                                                   */
+/* ---------------------------------------------------------------------- */
+@keyframes admin-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes admin-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(194, 154, 75, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(194, 154, 75, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(194, 154, 75, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-panel-copy,
+  .admin-auth-card,
+  .admin-status-dot {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                               */
+/* ---------------------------------------------------------------------- */
+@media (min-width: 960px) {
+  .admin-auth-panel {
+    display: flex;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-auth-card {
+    padding: 30px 22px 26px;
+  }
+}

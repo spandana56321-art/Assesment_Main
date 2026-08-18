@@ -1,0 +1,72 @@
+/* Step progress indicator */
+.stepbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.stepbar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepbar-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.5px solid var(--color-border-strong);
+  color: var(--color-text-faint);
+  background: var(--color-surface);
+}
+
+.stepbar-label {
+  font-size: 13px;
+  color: var(--color-text-faint);
+  font-weight: 500;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .stepbar-label {
+    display: inline;
+  }
+}
+
+.stepbar-connector {
+  width: 20px;
+  height: 1.5px;
+  background: var(--color-border-strong);
+  margin: 0 6px;
+}
+
+.stepbar-item--done .stepbar-dot {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}
+
+.stepbar-item--done .stepbar-label {
+  color: var(--color-text-muted);
+}
+
+.stepbar-item--done .stepbar-connector {
+  background: var(--color-success);
+}
+
+.stepbar-item--active .stepbar-dot {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.stepbar-item--active .stepbar-label {
+  color: var(--color-text);
+  font-weight: 600;
+}

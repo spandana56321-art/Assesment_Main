@@ -1,0 +1,542 @@
+/* ======================================================================
+   CANDIDATE SIGN-UP — shares the ink/brass identity introduced on the
+   admin console, restyled for the candidate-facing flow. Same token
+   values as AdminLogin.css (kept local here rather than imported, so
+   this file stays self-contained).
+====================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+.auth-layout {
+  --ink: #0b0d12;
+  --ink-soft: #171b24;
+  --paper: #f1f2f6;
+  --card: #ffffff;
+  --brass: #c29a4b;
+  --brass-deep: #9c7a34;
+  --line-dark: rgba(255, 255, 255, 0.09);
+  --line-light: #e2e3e9;
+  --text: #11131a;
+  --text-muted: #5b6070;
+  --text-faint: #8a8fa0;
+
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - 130px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Left panel                                                               */
+/* ---------------------------------------------------------------------- */
+.auth-panel {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background:
+    radial-gradient(circle at 8% 6%, rgba(194, 154, 75, 0.14) 0%, transparent 40%),
+    linear-gradient(165deg, var(--ink) 0%, var(--ink-soft) 100%);
+  background-repeat: no-repeat;
+  background-size: 160% 160%, 100% 100%;
+  color: #f4f4f2;
+  padding: 46px 52px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: auth-aurora-drift 18s ease-in-out infinite alternate;
+}
+
+.auth-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0, 0, 0, 0.85), transparent 72%);
+  pointer-events: none;
+}
+
+/* Corner bracket accents — same motif as the admin console */
+.auth-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.auth-corner::before,
+.auth-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--brass);
+}
+
+.auth-corner--tr {
+  top: 28px;
+  right: 28px;
+}
+
+.auth-corner--tr::before {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.auth-corner--tr::after {
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.auth-corner--bl {
+  bottom: 28px;
+  left: 28px;
+}
+
+.auth-corner--bl::before {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.auth-corner--bl::after {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.auth-panel-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Logo / brand row — kinetic entrance */
+.auth-panel-top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: auth-logo-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.auth-panel-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(194, 154, 75, 0.6);
+  pointer-events: none;
+  animation: auth-logo-ping 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s 1 both;
+}
+
+.auth-badge-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--brass);
+  border: 1px solid rgba(194, 154, 75, 0.4);
+  border-radius: 999px;
+  padding: 3px 9px;
+  margin-left: 2px;
+}
+
+.auth-panel-copy {
+  max-width: 420px;
+  animation: auth-panel-copy-in 0.5s ease both;
+}
+
+.auth-panel-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 18px;
+}
+
+.auth-panel-eyebrow::before {
+  content: '[';
+  opacity: 0.7;
+}
+
+.auth-panel-eyebrow::after {
+  content: ']';
+  opacity: 0.7;
+}
+
+.auth-panel-copy h2 {
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.auth-panel-copy p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(244, 244, 242, 0.7);
+  margin-bottom: 26px;
+}
+
+.auth-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(244, 244, 242, 0.9);
+  line-height: 1.4;
+  opacity: 0;
+  animation: auth-feature-in 0.5s ease both;
+}
+
+.auth-feature-list li:nth-child(1) { animation-delay: 0.36s; }
+.auth-feature-list li:nth-child(2) { animation-delay: 0.5s; }
+.auth-feature-list li:nth-child(3) { animation-delay: 0.64s; }
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 5px;
+  background: rgba(194, 154, 75, 0.14);
+  border: 1px solid rgba(194, 154, 75, 0.35);
+  color: var(--brass);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+/* Footer strip */
+.auth-panel-footer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-dark);
+  opacity: 0;
+  animation: auth-fade-in 0.6s ease 0.9s both;
+}
+
+.auth-panel-footnote {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(244, 244, 242, 0.5);
+}
+
+.auth-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: rgba(244, 244, 242, 0.55);
+}
+
+.auth-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brass);
+  animation: auth-pulse 2.4s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Right side — form                                                       */
+/* ---------------------------------------------------------------------- */
+.auth-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--paper);
+}
+
+.auth-form-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--line-light);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(11, 13, 18, 0.04), 0 20px 40px -20px rgba(11, 13, 18, 0.22);
+  padding: 38px 36px 34px;
+  overflow: hidden;
+  animation: auth-form-card-in 0.45s ease both;
+}
+
+.auth-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brass-deep), var(--brass) 50%, var(--brass-deep));
+  z-index: 1;
+}
+
+.auth-form-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+  animation: auth-card-sheen 1.15s ease 0.5s 1;
+}
+
+.role-toggle {
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 26px;
+}
+
+.role-toggle-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 9px 0;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.role-toggle-btn:hover:not(.role-toggle-btn--active) {
+  color: var(--text);
+}
+
+.role-toggle-btn--active {
+  background: var(--ink);
+  color: var(--brass);
+  box-shadow: 0 4px 10px -4px rgba(11, 13, 18, 0.4);
+  animation: auth-pill-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* .eyebrow / .subtitle / .field / .btn-primary are shared global classes
+   (common.css) used across other pages too — re-themed here, scoped to
+   .auth-form-card only, so nothing outside this page is affected. */
+.auth-form-card .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 10px;
+}
+
+.auth-form-card .eyebrow::before {
+  content: '[';
+  opacity: 0.6;
+}
+
+.auth-form-card .eyebrow::after {
+  content: ']';
+  opacity: 0.6;
+}
+
+.auth-form-card h1 {
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.auth-form-card .subtitle {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-bottom: 26px;
+}
+
+.auth-form-card .field label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.auth-form-card .field input {
+  border-color: var(--line-light);
+}
+
+.auth-form-card .field input:focus {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(194, 154, 75, 0.16);
+}
+
+.auth-form-card form {
+  gap: 16px;
+}
+
+.auth-form-card .btn-primary {
+  background: var(--ink);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px -4px rgba(11, 13, 18, 0.35);
+}
+
+.auth-form-card .btn-primary:hover:not(:disabled) {
+  background: #04050a;
+}
+
+.auth-form-card .btn-primary:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.auth-form-legal {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--text-faint);
+  text-align: center;
+  line-height: 1.55;
+  opacity: 0;
+  animation: auth-fade-in 0.5s ease 0.85s both;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Motion                                                                   */
+/* ---------------------------------------------------------------------- */
+@keyframes auth-aurora-drift {
+  0% { background-position: 0% 0%, 0 0; }
+  50% { background-position: 16% 12%, 0 0; }
+  100% { background-position: 0% 0%, 0 0; }
+}
+
+@keyframes auth-logo-in {
+  0% { opacity: 0; transform: scale(0.82) translateY(-6px); }
+  60% { opacity: 1; transform: scale(1.04) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes auth-logo-ping {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
+@keyframes auth-panel-copy-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes auth-feature-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes auth-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes auth-form-card-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes auth-card-sheen {
+  0% { left: -60%; opacity: 0; }
+  15% { opacity: 0.85; }
+  60% { opacity: 0.25; }
+  100% { left: 130%; opacity: 0; }
+}
+
+@keyframes auth-pill-in {
+  from { transform: scale(0.92); }
+  to { transform: scale(1); }
+}
+
+@keyframes auth-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(194, 154, 75, 0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(194, 154, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(194, 154, 75, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-panel,
+  .auth-panel-top,
+  .auth-panel-top::before,
+  .auth-panel-copy,
+  .auth-feature-list li,
+  .auth-panel-footer,
+  .auth-form-card,
+  .auth-form-card::after,
+  .role-toggle-btn--active,
+  .auth-form-legal,
+  .auth-status-dot {
+    animation: none;
+  }
+
+  .auth-feature-list li,
+  .auth-panel-footer,
+  .auth-form-legal {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive                                                               */
+/* ---------------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .auth-panel {
+    display: flex;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-form-card {
+    padding: 28px 22px;
+  }
+}

@@ -1,0 +1,36 @@
+.timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border: 1px solid rgba(52, 84, 209, 0.25);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.timer-badge--warning {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-color: rgba(199, 46, 63, 0.3);
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

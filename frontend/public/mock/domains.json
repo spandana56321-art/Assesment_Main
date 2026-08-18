@@ -1,0 +1,9 @@
+[
+  { "id": "devops", "name": "DevOps", "description": "CI/CD, containers, infrastructure", "mono": "DO", "accent": "amber" },
+  { "id": "da", "name": "Data Analytics", "description": "SQL, statistics, visualization", "mono": "DA", "accent": "teal" },
+  { "id": "react", "name": "React", "description": "Components, hooks, state", "mono": "RX", "accent": "blue" },
+  { "id": "htmlcss", "name": "HTML & CSS", "description": "Markup, layout, styling", "mono": "HC", "accent": "coral" },
+  { "id": "htmlcssjs", "name": "HTML, CSS & JS", "description": "Full front-end fundamentals", "mono": "JS", "accent": "teal" },
+  { "id": "java", "name": "Java", "description": "OOP, collections, streams", "mono": "JV", "accent": "coral" },
+  { "id": "python", "name": "Python", "description": "Syntax, data types, tooling", "mono": "PY", "accent": "blue" }
+]
