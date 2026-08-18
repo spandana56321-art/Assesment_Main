@@ -16,8 +16,7 @@
 // ============================================================
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:7000/api";
+  import.meta.env.VITE_API_URL
 
 // ============================================================
 // COMMON REQUEST HELPER
