@@ -12,7 +12,8 @@ const connectDB = async () => {
       );
     }
 
-    const conn = await mongoose.connect(mongoUri);
+    // const conn = await mongoose.connect(mongoUri);
+    const conn = await mongoose.connect(mongoUri, { family: 4 });
 
     console.log(" MongoDB Connected");
     console.log(`Host: ${conn.connection.host}`);
