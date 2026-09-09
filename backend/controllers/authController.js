@@ -1,25 +1,7 @@
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 
 const User = require("../models/User");
 const Otp = require("../models/Otp");
-
-// ====================================
-// Nodemailer Transporter
-// (explicit host/port + forced IPv4 to avoid
-// Render's ENETUNREACH issue with Gmail's IPv6 address)
-// ====================================
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // false for port 587 (uses STARTTLS)
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 // ====================================
 // Generate Random 6-Digit OTP
@@ -43,44 +25,62 @@ const signToken = (userId) =>
   );
 
 // ====================================
-// Send OTP Email
+// Send OTP Email (via Brevo HTTPS API)
 // ====================================
 
 const sendOtpEmail = async (email, otpCode) => {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Your SkillBridge Assessment OTP",
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
-        
-        <h2>SkillBridge Assessments</h2>
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: {
+        name: "SkillBridge Assessments",
+        email: "rahulkallur379@gmail.com", // must match the sender you verified in Brevo
+      },
+      to: [{ email }],
+      subject: "Your SkillBridge Assessment OTP",
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+          
+          <h2>SkillBridge Assessments</h2>
 
-        <p>Hello,</p>
+          <p>Hello,</p>
 
-        <p>
-          Your verification code for the SkillBridge Assessment is:
-        </p>
+          <p>
+            Your verification code for the SkillBridge Assessment is:
+          </p>
 
-        <h1 style="letter-spacing: 6px;">
-          ${otpCode}
-        </h1>
+          <h1 style="letter-spacing: 6px;">
+            ${otpCode}
+          </h1>
 
-        <p>
-          This OTP is valid for 5 minutes.
-        </p>
+          <p>
+            This OTP is valid for 5 minutes.
+          </p>
 
-        <p>
-          Please do not share this OTP with anyone.
-        </p>
+          <p>
+            Please do not share this OTP with anyone.
+          </p>
 
-        <p>
-          If you did not request this OTP, you can safely ignore this email.
-        </p>
+          <p>
+            If you did not request this OTP, you can safely ignore this email.
+          </p>
 
-      </div>
-    `,
+        </div>
+      `,
+    }),
   });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Brevo email send failed: ${response.status} ${errorBody}`
+    );
+  }
 };
 
 
