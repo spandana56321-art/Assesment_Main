@@ -1,0 +1,115 @@
+:root {
+  --bg: #f5f8fc;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --border: #e5eaf1;
+  --border-strong: #cfd7e3;
+  --text: #142033;
+  --text-muted: #667085;
+  --text-faint: #98a2b3;
+  --primary: #1769d2;
+  --primary-strong: #0b57b7;
+  --primary-soft: #edf5ff;
+  --success: #0f8a5f;
+  --success-soft: #eaf9f2;
+  --warning: #b76e00;
+  --warning-soft: #fff7e8;
+  --danger: #c83c4d;
+  --danger-soft: #fff0f2;
+  --shadow-sm: 0 4px 14px rgba(18, 32, 51, 0.04);
+  --shadow-md: 0 14px 36px rgba(18, 32, 51, 0.08);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 3px solid rgba(23, 105, 210, 0.16);
+  outline-offset: 2px;
+}
+h1, h2, h3, p { margin: 0; }
+
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.candidate-shell { background: linear-gradient(180deg, #f8fbff 0%, #f5f8fc 45%, #f7f9fc 100%); }
+
+.candidate-header {
+  min-height: 76px;
+  padding: 13px 32px;
+  display: grid;
+  grid-template-columns: minmax(230px, 1fr) auto minmax(160px, 1fr);
+  align-items: center;
+  gap: 24px;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(14px);
+}
+.candidate-brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.candidate-brand img { width: 182px; height: 45px; object-fit: contain; object-position: left center; display: block; }
+.candidate-brand span { color: var(--text-muted); font-size: 11px; font-weight: 700; padding-left: 11px; border-left: 1px solid var(--border); white-space: nowrap; }
+.candidate-header .stepbar { justify-self: center; }
+.candidate-header .timer-badge { justify-self: end; }
+
+.page-area { flex: 1; width: 100%; max-width: 1440px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: center; padding: 36px 28px 48px; }
+.page-area--login { max-width: none; padding: 0; align-items: stretch; }
+.shell-footer { display: flex; justify-content: center; align-items: center; gap: 8px; color: var(--text-faint); font-size: 11px; padding: 15px 20px; background: #fff; border-top: 1px solid var(--border); }
+
+.assessment-card {
+  width: 100%; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md); padding: 34px; position: relative; overflow: hidden;
+}
+.assessment-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, #1769d2, #5b9cf0); }
+.eyebrow { color: var(--primary); font-size: 10px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; margin-bottom: 9px; }
+.assessment-card h1 { font-size: 29px; line-height: 1.2; letter-spacing: -.03em; margin-bottom: 10px; }
+.subtitle { color: var(--text-muted); font-size: 13px; line-height: 1.7; margin-bottom: 22px; }
+.loading-text { color: var(--text-muted); font-size: 13px; padding: 18px 0; }
+form { display: flex; flex-direction: column; gap: 17px; }
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field label { color: #344054; font-size: 12px; font-weight: 750; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--border-strong); border-radius: 10px; background: #fff; color: var(--text); outline: 0; font-size: 13px; transition: border-color .15s ease, box-shadow .15s ease;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: #6da0df; box-shadow: 0 0 0 4px var(--primary-soft); }
+.field input::placeholder, .field textarea::placeholder { color: #a5adbb; }
+.field textarea { resize: vertical; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-error { display: flex; gap: 8px; align-items: flex-start; color: #a32939; background: var(--danger-soft); border: 1px solid #ffd0d7; border-radius: 10px; padding: 10px 12px; font-size: 12px; line-height: 1.5; }
+.form-success { color: #08744d; background: var(--success-soft); border: 1px solid #bfead7; padding: 10px 12px; border-radius: 10px; font-size: 12px; }
+.btn-primary, .btn-secondary, .btn-ghost { border-radius: 10px; padding: 11px 16px; font-size: 13px; font-weight: 800; transition: .15s ease; }
+.btn-primary { border: 1px solid var(--primary); color: #fff; background: linear-gradient(135deg, #1769d2, #0d5cbc); box-shadow: 0 8px 18px rgba(23,105,210,.16); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 11px 22px rgba(23,105,210,.2); }
+.btn-primary:disabled { background: #cdd5e0; border-color: #cdd5e0; box-shadow: none; }
+.btn-secondary { border: 1px solid var(--border-strong); color: #344054; background: #fff; }
+.btn-secondary:hover:not(:disabled), .btn-ghost:hover:not(:disabled) { background: #f8fafc; border-color: #aeb8c7; }
+.btn-ghost { border: 1px solid transparent; background: transparent; color: var(--text-muted); }
+.btn-block { width: 100%; }
+
+@media (max-width: 980px) {
+  .candidate-header { grid-template-columns: 1fr auto; }
+  .candidate-header .stepbar { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: 100%; overflow-x: auto; padding-bottom: 2px; }
+}
+@media (max-width: 620px) {
+  .candidate-header { padding: 11px 16px; gap: 12px; }
+  .candidate-brand img { width: 155px; height: 40px; }
+  .candidate-brand span { display: none; }
+  .page-area { padding: 22px 14px 32px; }
+  .assessment-card { padding: 26px 19px; border-radius: 16px; }
+  .assessment-card h1 { font-size: 24px; }
+  .field-row { grid-template-columns: 1fr; }
+  .shell-footer { font-size: 10px; }
+}

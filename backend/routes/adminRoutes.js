@@ -18,6 +18,7 @@ const {
   deleteQuestion,
   getExamById,
   getAllExams,
+  deleteExam,
   forceFinishExam,
 } = require("../controllers/admincontroller");
 
@@ -25,6 +26,7 @@ const {
   protectAdmin,
 } = require("../middleware/adminAuth");
 const { createQuestion } = require("../controllers/QuestionController");
+const { adminRecording, adminDocument } = require("../controllers/mediaController");
 
 /* =========================================
    AUTH
@@ -125,11 +127,20 @@ router.get(
   getExamById
 );
 
+router.delete(
+  "/exams/:id",
+  protectAdmin,
+  deleteExam
+);
+
 router.get(
   "/exams",
   protectAdmin,
   getAllExams
 );
+
+router.get("/exams/:id/recording", protectAdmin, adminRecording);
+router.get("/exams/:id/documents/:kind", protectAdmin, adminDocument);
 
 router.post(
   "/exams/:id/force-finish",

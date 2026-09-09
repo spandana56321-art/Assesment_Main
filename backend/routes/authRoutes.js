@@ -11,6 +11,13 @@ const {
 } = require("../controllers/authController");
 
 const { protect } = require("../middleware/auth");
+const multer = require("multer");
+const { uploadVerification } = require("../controllers/mediaController");
+
+const verificationUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 // ====================================
 // Screen 1: Register
@@ -37,6 +44,17 @@ router.post("/resend-otp", resendOtp);
 // ====================================
 
 router.post("/accept-terms", protect, acceptTerms);
+
+// ====================================
+// Identity verification upload
+// ====================================
+
+router.post(
+  "/verification",
+  protect,
+  verificationUpload.single("idDocument"),
+  uploadVerification
+);
 
 // ====================================
 // Get Logged-in User

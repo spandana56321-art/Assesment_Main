@@ -1,0 +1,215 @@
+/* Shared admin modal/form styles. Keeping these here prevents page-specific CSS duplication. */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.modal-panel {
+  width: min(720px, 100%);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  border: 1px solid #e4e7ec;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(16, 24, 40, 0.18);
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #eaecf0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #101828;
+  font-size: 20px;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #fff;
+  color: #475467;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #f9fafb;
+  border-color: #98a2b3;
+}
+
+.question-form {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.field input,
+.field textarea,
+.field select,
+.code-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #fff;
+  color: #101828;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input,
+.field select {
+  min-height: 42px;
+  padding: 0 12px;
+}
+
+.field textarea,
+.code-textarea {
+  padding: 11px 12px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.code-textarea:focus {
+  border-color: #84adE8;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.option-row,
+.testcase-row {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #475467;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.field-hint {
+  margin: 0;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #fecdca;
+  border-radius: 10px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.btn-primary,
+.btn-ghost {
+  min-height: 40px;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-primary {
+  border: 1px solid #155eef;
+  background: #155eef;
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #175cd3;
+}
+
+.btn-ghost {
+  border: 1px solid #d0d5dd;
+  background: #fff;
+  color: #344054;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.btn-small {
+  min-height: 34px;
+  padding-inline: 11px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  border-color: #fecdca;
+  color: #b42318;
+}
+
+@media (max-width: 620px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-panel {
+    max-height: 94vh;
+    border-radius: 14px;
+  }
+}

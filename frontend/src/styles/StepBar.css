@@ -1,0 +1,11 @@
+.stepbar { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.stepbar-item { display: flex; align-items: center; gap: 7px; }
+.stepbar-dot { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; border: 1px solid #d5dce7; background: #fff; color: #98a2b3; font-size: 10px; font-weight: 850; }
+.stepbar-label { font-size: 10px; color: #8a95a6; font-weight: 750; }
+.stepbar-connector { width: 24px; height: 1px; background: #dfe5ed; margin: 0 2px; }
+.stepbar-item--done .stepbar-dot { color: #fff; background: #0f8a5f; border-color: #0f8a5f; }
+.stepbar-item--done .stepbar-label { color: #526071; }
+.stepbar-item--done .stepbar-connector { background: #83cfb1; }
+.stepbar-item--active .stepbar-dot { color: #fff; background: #1769d2; border-color: #1769d2; box-shadow: 0 0 0 4px #edf5ff; }
+.stepbar-item--active .stepbar-label { color: #182538; font-weight: 850; }
+@media (max-width: 760px) { .stepbar-label { display: none; } .stepbar-connector { width: 18px; } }

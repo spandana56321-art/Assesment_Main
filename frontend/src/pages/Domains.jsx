@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { api } from "../services/api";
-import "./Domains.css";
+import "../styles/Domains.css";
 
 export default function Domains() {
   const { user, updateUser } = useUser();
   const navigate = useNavigate();
+
 
   // ============================================================
   // STATE
@@ -178,7 +179,7 @@ export default function Domains() {
 
       setError(
         err?.message ||
-          "Unable to check your active assessment."
+        "Unable to check your active assessment."
       );
 
       // Try loading domains even if active-exam
@@ -218,7 +219,7 @@ export default function Domains() {
       if (!data?.success) {
         throw new Error(
           data?.message ||
-            "Failed to load domains."
+          "Failed to load domains."
         );
       }
 
@@ -236,7 +237,7 @@ export default function Domains() {
 
       setError(
         err?.message ||
-          "Failed to load available domains."
+        "Failed to load available domains."
       );
 
     } finally {
@@ -314,8 +315,8 @@ export default function Domains() {
     const testEndTime =
       startTimeMs +
       durationMinutes *
-        60 *
-        1000;
+      60 *
+      1000;
 
     // ==========================================================
     // DOMAIN
@@ -490,7 +491,7 @@ export default function Domains() {
 
       setError(
         err?.message ||
-          "Unable to resume your assessment."
+        "Unable to resume your assessment."
       );
 
     } finally {
@@ -499,10 +500,17 @@ export default function Domains() {
   }
 
   // ============================================================
-  // START NEW EXAM
+  // PICK DOMAIN — GO TO IDENTITY VERIFICATION
+  // ============================================================
+  //
+  // NOTE: This no longer calls api.startExam() directly. The
+  // exam (and its server-side timer) is only started AFTER the
+  // candidate completes the webcam photo + ID upload step on the
+  // /verify screen, so verification time doesn't eat into the
+  // assessment duration.
   // ============================================================
 
-  async function pick(domain) {
+  function pick(domain) {
     if (
       startingExam ||
       resumingExam ||
@@ -512,257 +520,16 @@ export default function Domains() {
       return;
     }
 
-    try {
-      setError("");
+    setError("");
 
-      setStartingExam(true);
+    console.log(
+      "Domain selected, going to identity verification:",
+      domain._id
+    );
 
-      setSelectedDomainId(
-        domain._id
-      );
-
-      console.log(
-        "Starting exam for domain:",
-        domain._id
-      );
-
-      // ========================================================
-      // START EXAM API
-      // ========================================================
-
-      const exam =
-        await api.startExam(
-          domain._id,
-          user.token
-        );
-
-      console.log(
-        "Start exam response:",
-        exam
-      );
-
-      // ========================================================
-      // VALIDATE RESPONSE
-      // ========================================================
-
-      if (
-        !exam?.success ||
-        !exam?.examId ||
-        !Array.isArray(
-          exam.questions
-        ) ||
-        !exam.startTime ||
-        !exam.durationMinutes
-      ) {
-        throw new Error(
-          exam?.message ||
-            "Invalid exam response from server."
-        );
-      }
-
-      // ========================================================
-      // QUESTIONS CHECK
-      // ========================================================
-
-      if (
-        exam.questions.length === 0
-      ) {
-        throw new Error(
-          "No questions are available for this assessment."
-        );
-      }
-
-      // ========================================================
-      // SERVER START TIME
-      // ========================================================
-
-      const startTimeMs =
-        new Date(
-          exam.startTime
-        ).getTime();
-
-      if (
-        Number.isNaN(
-          startTimeMs
-        )
-      ) {
-        throw new Error(
-          "Invalid exam start time received from server."
-        );
-      }
-
-      // ========================================================
-      // DURATION
-      // ========================================================
-
-      const durationMinutes =
-        Number(
-          exam.durationMinutes
-        );
-
-      if (
-        !durationMinutes ||
-        durationMinutes <= 0
-      ) {
-        throw new Error(
-          "Invalid exam duration received from server."
-        );
-      }
-
-      // ========================================================
-      // END TIME
-      // ========================================================
-
-      const testEndTime =
-        startTimeMs +
-        durationMinutes *
-          60 *
-          1000;
-
-      // ========================================================
-      // TOTAL MARKS
-      // ========================================================
-
-      const totalMarks =
-        exam.questions.reduce(
-          (total, question) => {
-            return (
-              total +
-              Number(
-                question?.marks || 0
-              )
-            );
-          },
-          0
-        );
-
-      // ========================================================
-      // SAVE EXAM SESSION
-      // ========================================================
-
-      updateUser({
-        token:
-          user.token,
-
-        // Domain
-        domain:
-          domain._id,
-
-        domainId:
-          domain._id,
-
-        selectedDomain:
-          domain,
-
-        // Exam
-        examId:
-          exam.examId,
-
-        examStatus:
-          exam.status ||
-          "in_progress",
-
-        // Questions
-        questions:
-          exam.questions,
-
-        // Timer
-        durationMinutes,
-
-        startTime:
-          exam.startTime,
-
-        testEndTime,
-
-        // Result
-        score: 0,
-
-        totalMarks,
-
-        // Submission
-        autoSubmitted: false,
-
-        // Answers
-        answers: [],
-      });
-
-      console.log(
-        "Exam session stored."
-      );
-
-      // ========================================================
-      // NAVIGATE TO QUIZ
-      // ========================================================
-
-      navigate(
-        "/quiz",
-        {
-          replace: true,
-        }
-      );
-
-    } catch (err) {
-      console.error(
-        "Start exam error:",
-        err
-      );
-
-      const message =
-        err?.message?.toLowerCase() ||
-        "";
-
-      // ========================================================
-      // ACTIVE EXAM ALREADY EXISTS
-      // ========================================================
-
-      if (
-        message.includes(
-          "active exam"
-        )
-      ) {
-        console.log(
-          "Active exam already exists. Checking again..."
-        );
-
-        setActiveExam(null);
-
-        await checkActiveExam();
-
-        return;
-      }
-
-      // ========================================================
-      // NOT ENOUGH QUESTIONS
-      // ========================================================
-
-      if (
-        message.includes(
-          "not enough questions"
-        )
-      ) {
-        setError(
-          err.message
-        );
-
-        return;
-      }
-
-      // ========================================================
-      // NORMAL ERROR
-      // ========================================================
-
-      setError(
-        err?.message ||
-          "Unable to start the assessment."
-      );
-
-    } finally {
-      setStartingExam(false);
-
-      setSelectedDomainId(
-        null
-      );
-    }
+    navigate("/verify", {
+      state: { domain },
+    });
   }
 
   // ============================================================
@@ -866,7 +633,7 @@ export default function Domains() {
     <div className="assessment-card">
 
       <p className="eyebrow">
-        Step 4 of 5
+        Step 3 of 5
       </p>
 
       <h1>
@@ -886,10 +653,10 @@ export default function Domains() {
 
       {(loading ||
         checkingActiveExam) && (
-        <p className="loading-text">
-          Checking assessment status...
-        </p>
-      )}
+          <p className="loading-text">
+            Checking assessment status...
+          </p>
+        )}
 
       {/* ========================================================
           ERROR
@@ -930,7 +697,7 @@ export default function Domains() {
                 const isStartingThisDomain =
                   startingExam &&
                   selectedDomainId ===
-                    domain._id;
+                  domain._id;
 
                 return (
                   <button

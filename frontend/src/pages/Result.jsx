@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { api } from "../services/api";
-import "./Result.css";
+import "../styles/Result.css";
 
 export default function Result() {
   const {

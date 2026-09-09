@@ -16,7 +16,8 @@
 // ============================================================
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:7000/api"
 
 // ============================================================
 // COMMON REQUEST HELPER
@@ -29,9 +30,9 @@ async function request(endpoint, options = {}) {
     token,
   } = options;
 
-  const headers = {
-    "Content-Type": "application/json",
-  };
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  const headers = {};
+  if (!isFormData) headers["Content-Type"] = "application/json";
 
   // ==========================================================
   // JWT AUTHORIZATION
@@ -54,7 +55,7 @@ async function request(endpoint, options = {}) {
         method,
         headers,
         body: body
-          ? JSON.stringify(body)
+          ? (isFormData ? body : JSON.stringify(body))
           : undefined,
       }
     );
@@ -764,6 +765,13 @@ export const api = {
       });
     },
 
+    async deleteExam(examId, token) {
+      return request(`/admin/exams/${examId}`, {
+        method: "DELETE",
+        token,
+      });
+    },
+
     // ========================================================
     // FORCE-FINISH AN ABANDONED EXAM
     // ========================================================
@@ -785,5 +793,6 @@ export const api = {
         token,
       });
     },
+
   },
 };

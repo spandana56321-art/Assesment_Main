@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { api } from "../services/api";
-import "./Otp.css";
+import "../styles/Otp.css";
 
 // ==================================================
 // HELPERS — masking email for display
@@ -165,7 +165,7 @@ export default function Otp() {
   return (
     <div className="assessment-card">
 
-      <p className="eyebrow">[ Step 2 of 5 ]</p>
+      <p className="eyebrow">[ Step 1 of 5 ]</p>
 
       <h1>Confirm it's you</h1>
 

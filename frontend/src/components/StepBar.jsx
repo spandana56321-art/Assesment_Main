@@ -1,10 +1,11 @@
 import { useLocation } from 'react-router-dom'
-import './StepBar.css'
+import '../styles/StepBar.css'
 
 const steps = [
-  { key: 'verify', label: 'Verify identity', path: '/otp' },
+  { key: 'otp', label: 'Verify email', path: '/otp' },
   { key: 'terms', label: 'Terms', path: '/terms' },
   { key: 'domain', label: 'Choose domain', path: '/domains' },
+  { key: 'idcheck', label: 'Identity check', path: '/verify' },
   { key: 'quiz', label: 'Assessment', path: '/quiz' },
   { key: 'submitted', label: 'Submitted', path: '/submitted' },
 ]

@@ -114,8 +114,14 @@ export default function QuestionForm({ domain, question, onCancel, onSave, savin
       }
     }
 
-    if (!form.marks || Number(form.marks) < 1) {
-      setError('Marks must be at least 1.')
+    const marks = Number(form.marks)
+    if (!Number.isInteger(marks) || marks < 1 || marks > 100) {
+      setError('Marks must be a whole number between 1 and 100.')
+      return
+    }
+
+    if (isCoding && form.testCases.length > 20) {
+      setError('A coding question can contain at most 20 test cases.')
       return
     }
 
@@ -123,7 +129,7 @@ export default function QuestionForm({ domain, question, onCancel, onSave, savin
       _id: form._id,
       questionType: form.questionType,
       questionText: form.questionText.trim(),
-      marks: Number(form.marks),
+      marks,
     }
 
     if (needsOptions) {

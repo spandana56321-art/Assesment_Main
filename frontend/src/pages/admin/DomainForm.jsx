@@ -44,16 +44,20 @@ export default function DomainForm({ domain, onCancel, onSave, saving }) {
     const mcq = Number(form.mcqQuestionsPerExam)
     const coding = Number(form.codingQuestionsPerExam)
 
-    if (!duration || duration < 1) {
-      setError('Duration must be at least 1 minute.')
+    if (!Number.isInteger(duration) || duration < 1 || duration > 180) {
+      setError('Duration must be a whole number between 1 and 180 minutes.')
       return
     }
-    if (!total || total < 1) {
-      setError('Questions per exam must be at least 1.')
+    if (!Number.isInteger(total) || total < 1 || total > 100) {
+      setError('Questions per exam must be a whole number between 1 and 100.')
       return
     }
-    if (mcq < 0 || coding < 0) {
-      setError('MCQ and coding counts cannot be negative.')
+    if (!Number.isInteger(mcq) || !Number.isInteger(coding) || mcq < 0 || coding < 0) {
+      setError('MCQ and coding counts must be whole numbers and cannot be negative.')
+      return
+    }
+    if (mcq > total || coding > total) {
+      setError('MCQ and coding counts cannot exceed the total question count.')
       return
     }
     if (mcq + coding !== total) {

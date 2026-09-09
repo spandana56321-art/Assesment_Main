@@ -40,3 +40,5 @@ vite.svg
 # Temporary files
 *.tmp
 *.temp
+# Candidate evidence (local/private storage)
+uploads/

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdmin } from '../../context/AdminContext'
-import './AdminLogin.css'
+import '../../styles/AdminLogin.css'
 
 export default function AdminLogin() {
   const { login } = useAdmin()
@@ -41,9 +41,8 @@ export default function AdminLogin() {
         <div className="admin-auth-panel-inner">
           <div className="admin-badge-row">
             <span className="admin-badge-mark">
-              <img src="/branding/myhourly-mark.png" alt="" />
+              <img src="/branding/myhourly-mark.png" alt="HourlyRecruit Tech Labs" />
             </span>
-            <span className="admin-badge-name">MyHourly</span>
             <span className="admin-badge-tag">ADMIN</span>
           </div>
 
@@ -79,7 +78,7 @@ export default function AdminLogin() {
           </div>
 
           <div className="admin-panel-footer">
-            <span className="admin-footer-terminal">TERMINAL · MH-ADMIN-04</span>
+            <span className="admin-footer-terminal">ADMIN CONSOLE · HR-01</span>
             <span className="admin-status">
               <span className="admin-status-dot" aria-hidden="true" />
               OPERATIONAL
@@ -137,7 +136,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <p className="admin-credential-chip">Demo credentials: admin@myhourly.com / Admin@123</p>
+          {/* <p className="admin-credential-chip">Demo credentials: admin@myhourly.com / Admin@123</p> */}
         </div>
       </section>
     </div>

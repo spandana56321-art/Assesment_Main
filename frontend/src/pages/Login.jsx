@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { api } from "../services/api";
-import "./Login.css";
+import "../styles/Login.css";
 
 export default function Login() {
   const { updateUser } = useUser();
@@ -47,33 +47,75 @@ export default function Login() {
     const email = form.email.trim().toLowerCase();
     const phone = form.phone.trim();
 
+    // -------------------------------
+    // NAME
+    // -------------------------------
+
     if (!name) {
       setError("Please enter your full name.");
       return;
     }
+
+    if (name.length < 3) {
+      setError("Name must be at least 3 characters long.");
+      return;
+    }
+
+    const nameRegex = /^[A-Za-z]+(?:[\s'.-][A-Za-z]+)*$/;
+
+    if (!nameRegex.test(name)) {
+      setError(
+        "Name should only contain letters and spaces (no numbers or special characters)."
+      );
+      return;
+    }
+
+    // -------------------------------
+    // EMAIL
+    // -------------------------------
 
     if (!email) {
       setError("Please enter your email address.");
       return;
     }
 
-    if (!phone) {
-      setError("Please enter your phone number.");
-      return;
-    }
-
     const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
 
-    const phoneRegex =
-      /^[0-9+\-\s]{10,15}$/;
+    const emailLocalPart = email.split("@")[0];
 
-    if (!phoneRegex.test(phone)) {
+    if (/^\d+$/.test(emailLocalPart)) {
+      setError("Email cannot be only numbers before the @ symbol.");
+      return;
+    }
+
+    // -------------------------------
+    // PHONE
+    // -------------------------------
+
+    if (!phone) {
+      setError("Please enter your phone number.");
+      return;
+    }
+
+    const phoneDigitsOnly = phone.replace(/[\s+\-]/g, "");
+
+    if (!/^\d+$/.test(phoneDigitsOnly)) {
+      setError("Phone number should contain only digits, spaces, + or -.");
+      return;
+    }
+
+    if (phoneDigitsOnly.length < 10 || phoneDigitsOnly.length > 13) {
+      setError("Please enter a valid phone number (10-13 digits).");
+      return;
+    }
+
+    if (/^(\d)\1+$/.test(phoneDigitsOnly)) {
       setError("Please enter a valid phone number.");
       return;
     }
@@ -164,14 +206,10 @@ export default function Login() {
           <div className="auth-panel-top">
 
             <img
-              className="brand-mark-img brand-mark-img--light"
+              className="candidate-login-logo"
               src="/branding/myhourly-mark.png"
-              alt="MyHourly"
+              alt="HourlyRecruit Tech Labs"
             />
-
-            <span className="brand-name brand-name--light">
-              MyHourly
-            </span>
 
             <span className="auth-badge-tag">
               CANDIDATE
@@ -279,7 +317,7 @@ export default function Login() {
           {/* STEP */}
 
           <p className="eyebrow">
-            Step 1 of 5
+            Get started
           </p>
 
           <h1>
@@ -315,7 +353,7 @@ export default function Login() {
                 autoComplete="name"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="Rahul Kallur"
+                placeholder="Please Enter Your FullName"
                 disabled={loading}
               />
 
@@ -387,11 +425,11 @@ export default function Login() {
 
           {/* LEGAL */}
 
-          <p className="auth-form-legal">
+          {/* <p className="auth-form-legal">
             By continuing you agree this
             assessment reflects your own,
             unaided work.
-          </p>
+          </p> */}
 
         </div>
 

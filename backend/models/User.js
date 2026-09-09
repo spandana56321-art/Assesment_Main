@@ -44,6 +44,19 @@ const userSchema = new mongoose.Schema(
     termsAcceptedAt: {
       type: Date,
     },
+
+    // Identity verification files are stored outside MongoDB. The paths are
+    // intentionally exposed only through authenticated admin routes.
+    identityVerification: {
+      documentType: { type: String, enum: ["aadhaar", "pan"] },
+      documentOriginalName: String,
+      documentMimeType: String,
+      documentSize: Number,
+      documentPath: String,
+      photoMimeType: String,
+      photoPath: String,
+      verifiedAt: Date,
+    },
   },
   {
     timestamps: true,

@@ -1,10 +1,20 @@
 const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
 const User = require("../models/User");
 const Otp = require("../models/Otp");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ====================================
+// Nodemailer Transporter
+// ====================================
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // ====================================
 // Generate Random 6-Digit OTP
@@ -32,8 +42,8 @@ const signToken = (userId) =>
 // ====================================
 
 const sendOtpEmail = async (email, otpCode) => {
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
     to: email,
     subject: "Your SkillBridge Assessment OTP",
     html: `
@@ -460,9 +470,11 @@ const acceptTerms = async (req, res) => {
 // ====================================
 
 const getMe = async (req, res) => {
+  const user = req.user.toObject ? req.user.toObject() : { ...req.user };
+  delete user.identityVerification;
   return res.status(200).json({
     success: true,
-    user: req.user,
+    user,
   });
 };
 

@@ -88,6 +88,16 @@ const examSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    // Candidate recording is stored on the server and is available to admins
+    // only after the attempt is completed.
+    recording: {
+      path: String,
+      mimeType: String,
+      size: Number,
+      originalName: String,
+      uploadedAt: Date,
+    },
   },
   {
     timestamps: true,

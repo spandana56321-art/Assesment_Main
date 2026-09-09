@@ -10,6 +10,8 @@ const {
   isExamExpired,
 } = require("./examController");
 
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -518,6 +520,59 @@ const forceFinishExam = async (req, res) => {
 
 
 /* =========================================
+   DELETE EXAM / REVIEW
+========================================= */
+
+const deleteExam = async (req, res) => {
+  try {
+    const exam = await Exam.findById(req.params.id);
+
+    if (!exam) {
+      return res.status(404).json({
+        success: false,
+        message: "Assessment review not found",
+      });
+    }
+
+    await Answer.deleteMany({ exam: exam._id });
+
+    // Recording belongs to this assessment attempt only.
+    // Candidate identity files are shared at user level,
+    // so they are intentionally not deleted here.
+    if (exam.recording?.path) {
+      const mediaRoot = path.join(__dirname, "..", "uploads");
+      const recordingPath = path.join(mediaRoot, exam.recording.path);
+
+      try {
+        if (fs.existsSync(recordingPath)) {
+          fs.unlinkSync(recordingPath);
+        }
+      } catch (fileError) {
+        console.warn(
+          "Unable to remove assessment recording:",
+          fileError.message
+        );
+      }
+    }
+
+    await Exam.findByIdAndDelete(exam._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Assessment review deleted successfully",
+      examId: exam._id,
+    });
+  } catch (error) {
+    console.error("Delete exam error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to delete assessment review",
+    });
+  }
+};
+
+/* =========================================
    GET EXAM BY ID
 ========================================= */
 
@@ -526,7 +581,7 @@ const getExamById = async (req, res) => {
     const exam = await Exam.findById(
       req.params.id
     )
-      .populate("user", "name email")
+      .populate("user", "name email phone identityVerification")
       .populate("domain", "name")
       .populate("questions");
 
@@ -610,5 +665,6 @@ module.exports = {
   deleteQuestion,
   getExamById,
   getAllExams,
+  deleteExam,
   forceFinishExam,
 };

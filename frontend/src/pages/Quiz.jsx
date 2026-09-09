@@ -2,8 +2,10 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { api } from "../services/api";
+import { saveAssessmentRecording } from "../services/localMediaStore";
 import CodeRunner from "../components/CodeRunner";
-import "./Quiz.css";
+import ProctorGuard from "../components/ProctorGuard";
+import "../styles/Quiz.css";
 
 const KEYS = ["A", "B", "C", "D"];
 
@@ -323,7 +325,22 @@ export default function Quiz() {
           }
         }
 
+        // Stop the live recorder before leaving the assessment. The recording
+        // is intentionally stored in this browser's IndexedDB instead of the backend.
+        const recordingPromise = window.__stopAssessmentRecording
+          ? window.__stopAssessmentRecording()
+          : Promise.resolve(null);
+
         const result = await api.finishExam(user.token, user.examId);
+        const recordingBlob = await recordingPromise;
+
+        if (recordingBlob?.size) {
+          try {
+            await saveAssessmentRecording(user.examId, recordingBlob);
+          } catch (recordingError) {
+            console.warn("Local recording save failed:", recordingError);
+          }
+        }
 
         updateUser({
           score: result.score ?? 0,
@@ -332,7 +349,7 @@ export default function Quiz() {
           examStatus: "completed",
         });
 
-        navigate("/result", { replace: true });
+        navigate("/submitted", { replace: true });
       } catch (err) {
         console.error("Finish exam error:", err);
         setError(err.message || "Unable to submit the assessment.");
@@ -346,6 +363,15 @@ export default function Quiz() {
   const handleTimeUp = useCallback(() => {
     finishExam({ auto: true });
   }, [finishExam]);
+
+  const handleIntegrityViolation = useCallback(
+    (event, count) => {
+      if (count >= 3) {
+        finishExam({ auto: true, skipCurrentAnswer: false });
+      }
+    },
+    [finishExam]
+  );
 
   useEffect(() => {
     registerTimeUpHandler(handleTimeUp);
@@ -430,7 +456,7 @@ export default function Quiz() {
               disabled={submitting || savingAnswer}
             >
               <span className="option-key">{key}</span>
-              <span>{option}</span>
+              <span className="option-text">{option}</span>
             </button>
           );
         })}
@@ -492,80 +518,148 @@ export default function Quiz() {
   const isMcq = current.questionType === "mcq" || current.questionType === "output";
 
   return (
-    <div className={`assessment-card ${isCoding ? "assessment-card--wide" : ""}`}>
-      <div className="quiz-top">
-        <div className="quiz-meta">
-          <span>
-            Q{index + 1} of {list.length}
-          </span>
-          <span className="type-pill">
-            {current.questionType === "coding"
-              ? "Coding"
-              : current.questionType === "output"
-                ? "Output"
-                : "MCQ"}
-          </span>
-          <span className="marks-pill">
-            {current.marks || 1} {current.marks === 1 ? "mark" : "marks"}
-          </span>
-        </div>
-      </div>
+    <div className="quiz-page">
+      <ProctorGuard
+        examId={user.examId}
+        onViolation={handleIntegrityViolation}
+      />
 
-      <div className="progress-bar">
-        <div
-          className="progress-fill"
-          style={{ width: `${((index + 1) / list.length) * 100}%` }}
-        />
-      </div>
+      <div className="quiz-layout">
+        <aside className="quiz-sidebar">
+          <div className="quiz-sidebar-head">
+            <span className="quiz-sidebar-label">Assessment</span>
+            <strong>{user.selectedDomain?.name || "Technical assessment"}</strong>
+            <span>{list.length} questions · {user.durationMinutes || 30} min</span>
+          </div>
 
-      {isCoding ? (
-        renderCoding()
-      ) : (
-        <>
-          <p className="question">{current.questionText}</p>
-          {current.code && (
-            <pre className="code-block">
-              <code>{current.code}</code>
-            </pre>
+          <div className="quiz-progress-copy">
+            <span>Your progress</span>
+            <strong>{Math.round(((index + 1) / list.length) * 100)}%</strong>
+          </div>
+
+          <div className="quiz-mini-progress">
+            <span style={{ width: `${((index + 1) / list.length) * 100}%` }} />
+          </div>
+
+          <div className="question-palette">
+            {list.map((question, i) => {
+              const answered = isAnswered(question, answers[question._id]);
+              const active = i === index;
+              return (
+                <button
+                  key={question._id || i}
+                  type="button"
+                  className={`palette-item ${active ? "palette-item--active" : ""} ${answered ? "palette-item--answered" : ""}`}
+                  onClick={() => {
+                    if (!submitting && !savingAnswer) {
+                      setMandatoryAlert("");
+                      setIndex(i);
+                    }
+                  }}
+                  disabled={submitting || savingAnswer}
+                  aria-label={`Question ${i + 1}${answered ? ", answered" : ", unanswered"}`}
+                >
+                  {answered ? "✓" : i + 1}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="palette-legend">
+            <span><i className="legend-dot legend-dot--answered" /> Answered</span>
+            <span><i className="legend-dot" /> Unanswered</span>
+          </div>
+
+          <div className="quiz-sidebar-note">
+            <span className="shield-icon">✓</span>
+            <div>
+              <strong>Secure assessment</strong>
+              <p>Stay in full screen and keep your camera enabled.</p>
+            </div>
+          </div>
+        </aside>
+
+        <section className={`assessment-card quiz-card ${isCoding ? "assessment-card--wide" : ""}`}>
+          <div className="quiz-top">
+            <div>
+              <span className="question-kicker">Question {index + 1}</span>
+              <div className="quiz-meta">
+                <span>of {list.length}</span>
+                <span className="type-pill">
+                  {current.questionType === "coding"
+                    ? "Coding"
+                    : current.questionType === "output"
+                      ? "Output"
+                      : "MCQ"}
+                </span>
+                <span className="marks-pill">
+                  {current.marks || 1} {current.marks === 1 ? "mark" : "marks"}
+                </span>
+              </div>
+            </div>
+            <span className="quiz-save-state">
+              <span className="save-dot" />
+              {savingAnswer ? "Saving" : "Saved"}
+            </span>
+          </div>
+
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${((index + 1) / list.length) * 100}%` }}
+            />
+          </div>
+
+          {isCoding ? (
+            renderCoding()
+          ) : (
+            <>
+              <p className="question">{current.questionText}</p>
+              {current.code && (
+                <pre className="code-block">
+                  <code>{current.code}</code>
+                </pre>
+              )}
+              {isMcq && renderOptions()}
+            </>
           )}
-          {isMcq && renderOptions()}
-        </>
-      )}
 
-      {mandatoryAlert && (
-        <div className="mandatory-alert" role="alert">
-          <span className="mandatory-alert-icon" aria-hidden="true">!</span>
-          <span>{mandatoryAlert}</span>
-        </div>
-      )}
-
-      {error && <p className="form-error">{error}</p>}
-
-      <div className="quiz-nav">
-        <button
-          type="button"
-          className="nav-btn nav-btn--prev"
-          disabled={index === 0 || submitting || savingAnswer}
-          onClick={goPrev}
-        >
-          <span className="nav-btn-arrow" aria-hidden="true">←</span>
-          Previous
-        </button>
-
-        <button
-          type="button"
-          className={`nav-btn nav-btn--next ${isLast ? "nav-btn--finish" : ""}`}
-          disabled={submitting || savingAnswer}
-          onClick={goNext}
-        >
-          {submitting ? "Submitting..." : savingAnswer ? "Saving..." : isLast ? "Finish assessment" : "Next question"}
-          {!submitting && !savingAnswer && !isLast && (
-            <span className="nav-btn-arrow" aria-hidden="true">→</span>
+          {mandatoryAlert && (
+            <div className="mandatory-alert" role="alert">
+              <span className="mandatory-alert-icon" aria-hidden="true">!</span>
+              <span>{mandatoryAlert}</span>
+            </div>
           )}
-          {!submitting && !savingAnswer && isLast && (
-            <span className="nav-btn-arrow" aria-hidden="true">✓</span>
-          )}
-        </button>
+
+          {error && <p className="form-error">{error}</p>}
+
+          <div className="quiz-nav">
+            <button
+              type="button"
+              className="nav-btn nav-btn--prev"
+              disabled={index === 0 || submitting || savingAnswer}
+              onClick={goPrev}
+            >
+              <span className="nav-btn-arrow" aria-hidden="true">←</span>
+              Previous
+            </button>
+
+            <button
+              type="button"
+              className={`nav-btn nav-btn--next ${isLast ? "nav-btn--finish" : ""}`}
+              disabled={submitting || savingAnswer}
+              onClick={goNext}
+            >
+              {submitting ? "Submitting..." : savingAnswer ? "Saving..." : isLast ? "Finish assessment" : "Next question"}
+              {!submitting && !savingAnswer && !isLast && (
+                <span className="nav-btn-arrow" aria-hidden="true">→</span>
+              )}
+              {!submitting && !savingAnswer && isLast && (
+                <span className="nav-btn-arrow" aria-hidden="true">✓</span>
+              )}
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );
