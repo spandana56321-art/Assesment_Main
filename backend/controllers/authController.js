@@ -1,14 +1,25 @@
 const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
 const User = require("../models/User");
 const Otp = require("../models/Otp");
 
 // ====================================
-// Resend Client
+// Nodemailer Transporter
+// (explicit host/port + forced IPv4 to avoid
+// Render's ENETUNREACH issue with Gmail's IPv6 address)
 // ====================================
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true for port 465
+  family: 4,    // force IPv4
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // ====================================
 // Generate Random 6-Digit OTP
@@ -32,12 +43,12 @@ const signToken = (userId) =>
   );
 
 // ====================================
-// Send OTP Email (via Resend)
+// Send OTP Email
 // ====================================
 
 const sendOtpEmail = async (email, otpCode) => {
-  await resend.emails.send({
-    from: "SkillBridge Assessments <onboarding@resend.dev>", // replace with your verified domain sender if you have one
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
     to: email,
     subject: "Your SkillBridge Assessment OTP",
     html: `
@@ -159,7 +170,7 @@ const register = async (req, res) => {
     });
 
     // -------------------------------
-    // Send OTP through Resend
+    // Send OTP email
     // -------------------------------
 
     await sendOtpEmail(
