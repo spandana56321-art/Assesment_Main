@@ -12,9 +12,9 @@ const Otp = require("../models/Otp");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // true for port 465
-  family: 4,    // force IPv4
+  port: 587,
+  secure: false, // false for port 587 (uses STARTTLS)
+  family: 4,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
